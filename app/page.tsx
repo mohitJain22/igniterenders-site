@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
+import React, { useState, forwardRef } from "react";
+import { motion, MotionProps } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,8 +22,11 @@ import {
   Shield,
 } from "lucide-react";
 
-// ---- Typed wrapper to avoid framer-motion className typing issues on some builds
-const MDiv = (props: HTMLMotionProps<"div">) => <motion.div {...props} />;
+/** Typed wrapper so className & standard div props work with framer-motion on strict builds */
+type MDivProps = React.HTMLAttributes<HTMLDivElement> & MotionProps;
+const MDiv = forwardRef<HTMLDivElement, MDivProps>(function MDiv(props, ref) {
+  return <motion.div ref={ref} {...props} />;
+});
 
 const BRAND = {
   name: "IgniteRenders",
@@ -82,20 +85,20 @@ function Hero() {
             We craft cinematic renders, simulations, and motion spots for ads, product launches, and e-commerce. Faster than shoots. Limitless creativity.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#work"><Button size="lg" className="rounded-2xl"><Images className="w-4 h-4 mr-2"/>See our work</Button></a>
-            <a href="#contact"><Button variant="secondary" size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2"/>Start a project</Button></a>
+            <a href="#work"><Button size="lg" className="rounded-2xl"><Images className="w-4 h-4 mr-2" />See our work</Button></a>
+            <a href="#contact"><Button variant="secondary" size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2" />Start a project</Button></a>
           </div>
           <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
-            <div className="flex items-center gap-2"><Shield className="w-4 h-4"/> NDA friendly</div>
-            <div className="flex items-center gap-2"><PlayCircle className="w-4 h-4"/> 4K delivery</div>
-            <div className="flex items-center gap-2"><Sparkles className="w-4 h-4"/> PBR accurate</div>
+            <div className="flex items-center gap-2"><Shield className="w-4 h-4" /> NDA friendly</div>
+            <div className="flex items-center gap-2"><PlayCircle className="w-4 h-4" /> 4K delivery</div>
+            <div className="flex items-center gap-2"><Sparkles className="w-4 h-4" /> PBR accurate</div>
           </div>
         </motion.div>
 
         <MDiv initial={{opacity:0, scale:0.98}} animate={{opacity:1, scale:1}} transition={{duration:0.6, delay:0.1}}>
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop" alt="Hero 3D render" className="w-full h-full object-cover"/>
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent"/>
+            <img src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop" alt="Hero 3D render" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
           </div>
         </MDiv>
       </div>
@@ -105,10 +108,10 @@ function Hero() {
 
 function Services() {
   const items = [
-    { icon: <Sparkles className="w-5 h-5"/>, title: "CG Packshots", desc: "Photoreal stills for Amazon, Shopify, D2C and print." },
-    { icon: <PlayCircle className="w-5 h-5"/>, title: "Ad Spots", desc: "6–30s motion ads optimised for Meta, YouTube & OTT." },
-    { icon: <Workflow className="w-5 h-5"/>, title: "Simulations", desc: "Fluids, cloth, particles and hard-surface motion." },
-    { icon: <Shield className="w-5 h-5"/>, title: "Lookdev & PBR", desc: "Physically-accurate shaders, lighting and color pipelines." },
+    { icon: <Sparkles className="w-5 h-5" />, title: "CG Packshots", desc: "Photoreal stills for Amazon, Shopify, D2C and print." },
+    { icon: <PlayCircle className="w-5 h-5" />, title: "Ad Spots", desc: "6–30s motion ads optimised for Meta, YouTube & OTT." },
+    { icon: <Workflow className="w-5 h-5" />, title: "Simulations", desc: "Fluids, cloth, particles and hard-surface motion." },
+    { icon: <Shield className="w-5 h-5" />, title: "Lookdev & PBR", desc: "Physically-accurate shaders, lighting and color pipelines." },
   ];
   return (
     <section id="services" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
@@ -138,16 +141,16 @@ function Work() {
     <section id="work" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <div className="flex items-end justify-between mb-8">
         <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Selected work</h2>
-        <a href="#contact" className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1">Request full reel <ArrowRight className="w-4 h-4"/></a>
+        <a href="#contact" className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1">Request full reel <ArrowRight className="w-4 h-4" /></a>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {GALLERY.map((item, idx) => (
           <MDiv
             key={idx}
-            initial={{opacity:0, y:10}}
-            whileInView={{opacity:1, y:0}}
-            viewport={{once:true}}
-            transition={{duration:0.4, delay: idx*0.04}}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: idx * 0.04 }}
             className="group relative overflow-hidden rounded-3xl border border-white/10"
           >
             <img
@@ -155,7 +158,7 @@ function Work() {
               alt={item.title}
               className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"/>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div className="text-sm font-medium">{item.title}</div>
               <Button size="sm" variant="secondary" className="rounded-xl">View</Button>
@@ -182,7 +185,7 @@ function Process() {
           <Card key={i}>
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
-                <span>{i+1}. {s.title}</span>
+                <span>{i + 1}. {s.title}</span>
                 <Badge>{s.meta}</Badge>
               </CardTitle>
             </CardHeader>
@@ -207,7 +210,7 @@ function Pricing() {
       <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">Transparent pricing</h2>
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((t, i) => (
-          <Card key={i} className={`${i===1 ? 'ring-2 ring-indigo-400' : ''}`}>
+          <Card key={i} className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}>
             <CardHeader>
               <CardTitle className="text-xl">{t.name}</CardTitle>
               <div className="text-3xl font-semibold">{t.price}</div>
@@ -215,7 +218,7 @@ function Pricing() {
             <CardContent>
               <ul className="space-y-2 text-sm">
                 {t.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5"/>{f}</li>
+                  <li key={j} className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5" />{f}</li>
                 ))}
               </ul>
               <a href="#contact"><Button className="w-full mt-6 rounded-2xl">Choose {t.name}</Button></a>
@@ -238,13 +241,13 @@ function Contact() {
           <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Let's make something stunning</h2>
           <p className="mt-3 opacity-80 max-w-prose">Share a link to your product, target platform, deadlines and example styles you like. We'll reply with a ballpark and suggested approach.</p>
           <div className="mt-6 space-y-2 text-sm">
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}><Mail className="w-4 h-4"/>{BRAND.email}</a>
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`tel:${BRAND.phone}`}><Phone className="w-4 h-4"/>{BRAND.phone}</a>
+            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}><Mail className="w-4 h-4" />{BRAND.email}</a>
+            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`tel:${BRAND.phone}`}><Phone className="w-4 h-4" />{BRAND.phone}</a>
           </div>
           <div className="mt-6 flex items-center gap-4 opacity-80">
-            <a href={BRAND.instagram} aria-label="Instagram" className="hover:opacity-100 opacity-80"><Instagram className="w-5 h-5"/></a>
-            <a href={BRAND.linkedin} aria-label="LinkedIn" className="hover:opacity-100 opacity-80"><Linkedin className="w-5 h-5"/></a>
-            <a href={BRAND.youtube} aria-label="YouTube" className="hover:opacity-100 opacity-80"><Youtube className="w-5 h-5"/></a>
+            <a href={BRAND.instagram} aria-label="Instagram" className="hover:opacity-100 opacity-80"><Instagram className="w-5 h-5" /></a>
+            <a href={BRAND.linkedin} aria-label="LinkedIn" className="hover:opacity-100 opacity-80"><Linkedin className="w-5 h-5" /></a>
+            <a href={BRAND.youtube} aria-label="YouTube" className="hover:opacity-100 opacity-80"><Youtube className="w-5 h-5" /></a>
           </div>
         </div>
         <Card>
@@ -259,11 +262,11 @@ function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3">
-                <Input required placeholder="Name"/>
-                <Input required type="email" placeholder="Email"/>
-                <Input placeholder="Company"/>
-                <Input placeholder="Link to product / assets"/>
-                <Textarea placeholder="Tell us about the scope, timeline, and platforms"/>
+                <Input required placeholder="Name" />
+                <Input required type="email" placeholder="Email" />
+                <Input placeholder="Company" />
+                <Input placeholder="Link to product / assets" />
+                <Textarea placeholder="Tell us about the scope, timeline, and platforms" />
                 <Button type="submit" className="w-full rounded-2xl">Request quote</Button>
                 <p className="text-xs opacity-70 text-center">By submitting, you agree to be contacted about your project.</p>
               </form>
@@ -284,7 +287,7 @@ function CTA() {
             <div className="text-2xl md:text-3xl font-semibold">Ready to launch scroll-stopping ads?</div>
             <p className="opacity-80 text-sm mt-2 max-w-prose">We can start from CAD, references or even napkin sketches. Typical turnaround 7–14 days.</p>
           </div>
-          <a href="#contact"><Button size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2"/>Get started</Button></a>
+          <a href="#contact"><Button size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2" />Get started</Button></a>
         </CardContent>
       </Card>
     </section>
