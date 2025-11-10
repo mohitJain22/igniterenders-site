@@ -1,0 +1,12 @@
+# dependencies & builds
+node_modules/
+.next/
+dist/
+build/
+
+# env & tooling
+.env*
+.vercel/
+.vscode/
+npm-debug.log*
+.DS_Store

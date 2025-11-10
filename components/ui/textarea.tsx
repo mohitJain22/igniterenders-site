@@ -1,0 +1,1 @@
+export function Textarea(props){return <textarea {...props} className={`w-full min-h-[120px] px-3 py-2 rounded-xl bg-white/5 border border-white/10`} />;}
