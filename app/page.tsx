@@ -9,20 +9,16 @@ import { Badge } from "@/components/ui/badge";
 import {
   Check,
   Mail,
-  Phone,
   Rocket,
   Sparkles,
   PlayCircle,
   ArrowRight,
   Instagram,
-  Linkedin,
-  Youtube,
   Images,
-  Workflow,
   Shield,
 } from "lucide-react";
 
-// Typed wrapper for motion.div to fix TS on Vercel
+/** Typed wrapper so className & standard div props work cleanly with framer-motion on strict builds */
 type MDivProps = React.HTMLAttributes<HTMLDivElement> & MotionProps;
 const MDiv = forwardRef<HTMLDivElement, MDivProps>(function MDiv(props, ref) {
   return <motion.div ref={ref} {...props} />;
@@ -31,11 +27,8 @@ const MDiv = forwardRef<HTMLDivElement, MDivProps>(function MDiv(props, ref) {
 const BRAND = {
   name: "IgniteRenders",
   tagline: "High-impact 3D product ads that convert",
-  email: "hello@igniterenders.com",
-  phone: "+91 90000 00000",
-  instagram: "https://www.instagram.com/",
-  linkedin: "https://www.linkedin.com/",
-  youtube: "https://www.youtube.com/",
+  email: "mohit@igniterenders.com",
+  instagram: "https://instagram.com/igniterenders",
 };
 
 const GALLERY = [
@@ -58,7 +51,6 @@ function Nav() {
         </div>
         <div className="hidden md:flex items-center gap-6 text-sm">
           <a href="#work" className="opacity-80 hover:opacity-100">Work</a>
-          {/* Services link removed */}
           <a href="#process" className="opacity-80 hover:opacity-100">Process</a>
           <a href="#pricing" className="opacity-80 hover:opacity-100">Pricing</a>
           <a href="#contact" className="opacity-80 hover:opacity-100">Contact</a>
@@ -75,6 +67,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/20 via-transparent to-transparent pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
         <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6}}>
           <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight">
@@ -99,7 +92,11 @@ function Hero() {
 
         <MDiv initial={{opacity:0, scale:0.98}} animate={{opacity:1, scale:1}} transition={{duration:0.6, delay:0.1}}>
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop" className="w-full h-full object-cover" />
+            <img
+              src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop"
+              alt="Hero render"
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
           </div>
         </MDiv>
@@ -128,10 +125,12 @@ function Work() {
             transition={{duration:0.4, delay: idx*0.04}}
             className="group relative overflow-hidden rounded-3xl border border-white/10"
           >
-            <img src={item.img} alt={item.title} className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-105" />
-
+            <img
+              src={item.img}
+              alt={item.title}
+              className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-105"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div className="text-sm font-medium">{item.title}</div>
               <Button size="sm" variant="secondary" className="rounded-xl">View</Button>
@@ -154,7 +153,6 @@ function Process() {
   return (
     <section id="process" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">How we work</h2>
-
       <div className="grid md:grid-cols-4 gap-6">
         {steps.map((s, i) => (
           <Card key={i}>
@@ -208,7 +206,6 @@ function Pricing() {
   return (
     <section id="pricing" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">Transparent pricing</h2>
-
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((t, i) => (
           <Card key={i} className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}>
@@ -229,7 +226,6 @@ function Pricing() {
           </Card>
         ))}
       </div>
-
     </section>
   );
 }
@@ -257,15 +253,15 @@ function Contact() {
             <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}>
               <Mail className="w-4 h-4" /> {BRAND.email}
             </a>
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`tel:${BRAND.phone}`}>
-              <Phone className="w-4 h-4" /> {BRAND.phone}
-            </a>
           </div>
 
           <div className="mt-6 flex items-center gap-4 opacity-80">
-            <a href={BRAND.instagram}><Instagram className="w-5 h-5" /></a>
-            <a href={BRAND.linkedin}><Linkedin className="w-5 h-5" /></a>
-            <a href={BRAND.youtube}><Youtube className="w-5 h-5" /></a>
+            <a href={BRAND.instagram} aria-label="Instagram" className="hover:opacity-100 opacity-80">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href={`mailto:${BRAND.email}`} aria-label="Email" className="hover:opacity-100 opacity-80">
+              <Mail className="w-5 h-5" />
+            </a>
           </div>
         </div>
 
@@ -347,7 +343,6 @@ export default function Page() {
       <Nav />
       <Hero />
       <Work />
-      {/* Services removed */}
       <Process />
       <Pricing />
       <Contact />
