@@ -1,15 +1,29 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
-  Check, Mail, Phone, Rocket, Sparkles, PlayCircle, ArrowRight,
-  Instagram, Linkedin, Youtube, Images, Workflow, Shield
+  Check,
+  Mail,
+  Phone,
+  Rocket,
+  Sparkles,
+  PlayCircle,
+  ArrowRight,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Images,
+  Workflow,
+  Shield,
 } from "lucide-react";
+
+// ---- Typed wrapper to avoid framer-motion className typing issues on some builds
+const MDiv = (props: HTMLMotionProps<"div">) => <motion.div {...props} />;
 
 const BRAND = {
   name: "IgniteRenders",
@@ -77,12 +91,13 @@ function Hero() {
             <div className="flex items-center gap-2"><Sparkles className="w-4 h-4"/> PBR accurate</div>
           </div>
         </motion.div>
-        <motion.div initial={{opacity:0, scale:0.98}} animate={{opacity:1, scale:1}} transition={{duration:0.6, delay:0.1}}>
+
+        <MDiv initial={{opacity:0, scale:0.98}} animate={{opacity:1, scale:1}} transition={{duration:0.6, delay:0.1}}>
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
             <img src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop" alt="Hero 3D render" className="w-full h-full object-cover"/>
             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent"/>
           </div>
-        </motion.div>
+        </MDiv>
       </div>
     </section>
   );
@@ -127,7 +142,7 @@ function Work() {
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {GALLERY.map((item, idx) => (
-          <motion.div
+          <MDiv
             key={idx}
             initial={{opacity:0, y:10}}
             whileInView={{opacity:1, y:0}}
@@ -145,7 +160,7 @@ function Work() {
               <div className="text-sm font-medium">{item.title}</div>
               <Button size="sm" variant="secondary" className="rounded-xl">View</Button>
             </div>
-          </motion.div>
+          </MDiv>
         ))}
       </div>
     </section>
@@ -200,9 +215,7 @@ function Pricing() {
             <CardContent>
               <ul className="space-y-2 text-sm">
                 {t.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 mt-0.5"/>{f}
-                  </li>
+                  <li key={j} className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5"/>{f}</li>
                 ))}
               </ul>
               <a href="#contact"><Button className="w-full mt-6 rounded-2xl">Choose {t.name}</Button></a>
@@ -210,9 +223,7 @@ function Pricing() {
           </Card>
         ))}
       </div>
-      <p className="text-xs opacity-70 mt-3">
-        *Final quotes depend on scope, assets, timelines and usage. Prices shown are typical starting points.
-      </p>
+      <p className="text-xs opacity-70 mt-3">*Final quotes depend on scope, assets, timelines and usage. Prices shown are typical starting points.</p>
     </section>
   );
 }
@@ -225,17 +236,10 @@ function Contact() {
       <div className="grid md:grid-cols-2 gap-8 items-start">
         <div>
           <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Let's make something stunning</h2>
-          <p className="mt-3 opacity-80 max-w-prose">
-            Share a link to your product, target platform, deadlines and example styles you like.
-            We'll reply with a ballpark and suggested approach.
-          </p>
+          <p className="mt-3 opacity-80 max-w-prose">Share a link to your product, target platform, deadlines and example styles you like. We'll reply with a ballpark and suggested approach.</p>
           <div className="mt-6 space-y-2 text-sm">
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}>
-              <Mail className="w-4 h-4"/>{BRAND.email}
-            </a>
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`tel:${BRAND.phone}`}>
-              <Phone className="w-4 h-4"/>{BRAND.phone}
-            </a>
+            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}><Mail className="w-4 h-4"/>{BRAND.email}</a>
+            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`tel:${BRAND.phone}`}><Phone className="w-4 h-4"/>{BRAND.phone}</a>
           </div>
           <div className="mt-6 flex items-center gap-4 opacity-80">
             <a href={BRAND.instagram} aria-label="Instagram" className="hover:opacity-100 opacity-80"><Instagram className="w-5 h-5"/></a>
@@ -251,9 +255,7 @@ function Contact() {
             {status === "sent" ? (
               <div className="text-sm">
                 <p className="font-medium">Thanks! We'll get back within 24 hours.</p>
-                <p className="opacity-80 mt-2">
-                  Meanwhile, email us references at <a className="underline" href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
-                </p>
+                <p className="opacity-80 mt-2">Meanwhile, email us references at <a className="underline" href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3">
@@ -280,9 +282,7 @@ function CTA() {
         <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <div className="text-2xl md:text-3xl font-semibold">Ready to launch scroll-stopping ads?</div>
-            <p className="opacity-80 text-sm mt-2 max-w-prose">
-              We can start from CAD, references or even napkin sketches. Typical turnaround 7–14 days.
-            </p>
+            <p className="opacity-80 text-sm mt-2 max-w-prose">We can start from CAD, references or even napkin sketches. Typical turnaround 7–14 days.</p>
           </div>
           <a href="#contact"><Button size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2"/>Get started</Button></a>
         </CardContent>
