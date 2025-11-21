@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, forwardRef } from "react";
-import { motion, MotionProps, AnimatePresence } from "framer-motion";
+import { motion, MotionProps } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,61 +16,14 @@ import {
   Instagram,
   Images,
   Shield,
-  X
 } from "lucide-react";
 
-/** Typed wrapper wrapper for framer-motion */
+/** Typed wrapper so className & standard div props work cleanly with framer-motion on strict builds */
 type MDivProps = React.HTMLAttributes<HTMLDivElement> & MotionProps;
 const MDiv = forwardRef<HTMLDivElement, MDivProps>(function MDiv(props, ref) {
   return <motion.div ref={ref} {...props} />;
 });
 
-/* -------------------------------
-   🔥 VIDEO MODAL COMPONENT
---------------------------------*/
-function VideoModal({ isOpen, onClose, videoUrl }) {
-  return (
-    <AnimatePresence>
-      {isOpen && videoUrl && (
-        <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-        >
-          <motion.div
-            className="relative w-[90vw] max-w-4xl bg-black rounded-xl overflow-hidden"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              className="absolute top-3 right-3 bg-white/10 hover:bg-white/20 p-2 rounded-full"
-              onClick={onClose}
-            >
-              <X className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Video */}
-            <video
-              src={videoUrl}
-              autoPlay
-              controls
-              className="w-full h-auto"
-            />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-/* -------------------------------
-   BRAND & GALLERY
---------------------------------*/
 const BRAND = {
   name: "IgniteRenders",
   tagline: "High-impact 3D product ads that convert",
@@ -79,47 +32,17 @@ const BRAND = {
 };
 
 const GALLERY = [
-  {
-    title: "Gemini Dirtbike Render",
-    img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763728527/Gemini_Generated_Image_z4ghvuz4ghvuz4gh_tx0zi9.png",
-    video:
-      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763735637/Colosseum_s_Scent_A_Roman_s_Reflection_1_sorwxn.mp4",
-  },
-  {
-    title: "Sleek Headphones – Launch Visual",
-    img:
-      "https://images.unsplash.com/photo-1585386959984-a41552231658?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
-  {
-    title: "Smartwatch – Liquid Metal Look",
-    img:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
-  {
-    title: "Coffee Maker – Cinematic Ad",
-    img:
-      "https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
-  {
-    title: "Skincare – Floating CG Packshot",
-    img:
-      "https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
-  {
-    title: "Soda Can – Splash Simulation",
-    img:
-      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
+ 
+  { title: "Gemini Dirtbike Render", img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763728527/Gemini_Generated_Image_z4ghvuz4ghvuz4gh_tx0zi9.png" },
+{ title: "Gemini Dirtbike Render", video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763735637/Colosseum_s_Scent_A_Roman_s_Reflection_1_sorwxn.mp4"},
+  { title: "Sleek Headphones – Launch Visual", img: "https://images.unsplash.com/photo-1585386959984-a41552231658?q=80&w=1600&auto=format&fit=crop" },
+  { title: "Smartwatch – Liquid Metal Look", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1600&auto=format&fit=crop" },
+  { title: "Coffee Maker – Cinematic Ad", img: "https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1600&auto=format&fit=crop" },
+  { title: "Skincare – Floating CG Packshot", img: "https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1600&auto=format&fit=crop" },
+  { title: "Soda Can – Splash Simulation", img: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1600&auto=format&fit=crop" },
+  
 ];
 
-/* -------------------------------
-   NAV
---------------------------------*/
 function Nav() {
   return (
     <div className="sticky top-0 z-50 backdrop-blur bg-black/50 border-b border-white/10">
@@ -130,91 +53,47 @@ function Nav() {
           <Badge className="ml-2">3D Ads Studio</Badge>
         </div>
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#work" className="opacity-80 hover:opacity-100">
-            Work
-          </a>
-          <a href="#process" className="opacity-80 hover:opacity-100">
-            Process
-          </a>
-          <a href="#pricing" className="opacity-80 hover:opacity-100">
-            Pricing
-          </a>
-          <a href="#contact" className="opacity-80 hover:opacity-100">
-            Contact
-          </a>
+          <a href="#work" className="opacity-80 hover:opacity-100">Work</a>
+          <a href="#process" className="opacity-80 hover:opacity-100">Process</a>
+          <a href="#pricing" className="opacity-80 hover:opacity-100">Pricing</a>
+          <a href="#contact" className="opacity-80 hover:opacity-100">Contact</a>
         </div>
         <div className="flex items-center gap-2">
-          <a href="#contact">
-            <Button size="sm" className="rounded-2xl">
-              Get a quote
-            </Button>
-          </a>
+          <a href="#contact"><Button size="sm" className="rounded-2xl">Get a quote</Button></a>
         </div>
       </div>
     </div>
   );
 }
 
-/* -------------------------------
-   HERO
---------------------------------*/
 function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/20 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.6}}>
           <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight">
             3D product visuals that
-            <span className="bg-gradient-to-br from-indigo-400 to-cyan-300 bg-clip-text text-transparent">
-              {" "}
-              stop the scroll.
-            </span>
+            <span className="bg-gradient-to-br from-indigo-400 to-cyan-300 bg-clip-text text-transparent"> stop the scroll.</span>
           </h1>
           <p className="mt-5 text-base md:text-lg opacity-80 max-w-xl">
-            We craft cinematic renders, simulations, and motion spots for ads,
-            product launches, and e-commerce. Faster than shoots. Limitless
-            creativity.
+            We craft cinematic renders, simulations, and motion spots for ads, product launches, and e-commerce. Faster than shoots. Limitless creativity.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#work">
-              <Button size="lg" className="rounded-2xl">
-                <Images className="w-4 h-4 mr-2" />
-                See our work
-              </Button>
-            </a>
-            <a href="#contact">
-              <Button variant="secondary" size="lg" className="rounded-2xl">
-                <Rocket className="w-4 h-4 mr-2" />
-                Start a project
-              </Button>
-            </a>
+            <a href="#work"><Button size="lg" className="rounded-2xl"><Images className="w-4 h-4 mr-2" />See our work</Button></a>
+            <a href="#contact"><Button variant="secondary" size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2" />Start a project</Button></a>
           </div>
 
           <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4" /> NDA friendly
-            </div>
-            <div className="flex items-center gap-2">
-              <PlayCircle className="w-4 h-4" /> 4K delivery
-            </div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" /> PBR accurate
-            </div>
+            <div className="flex items-center gap-2"><Shield className="w-4 h-4" /> NDA friendly</div>
+            <div className="flex items-center gap-2"><PlayCircle className="w-4 h-4" /> 4K delivery</div>
+            <div className="flex items-center gap-2"><Sparkles className="w-4 h-4" /> PBR accurate</div>
           </div>
         </motion.div>
 
-        <MDiv
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
+        <MDiv initial={{opacity:0, scale:0.98}} animate={{opacity:1, scale:1}} transition={{duration:0.6, delay:0.1}}>
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
             <img
               src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop"
@@ -229,34 +108,12 @@ function Hero() {
   );
 }
 
-/* -------------------------------
-   WORK (with modal)
---------------------------------*/
 function Work() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
-
-  const openVideo = (url) => {
-    if (!url) return;
-    setActiveVideo(url);
-    setIsModalOpen(true);
-  };
-
-  const closeVideo = () => {
-    setActiveVideo(null);
-    setIsModalOpen(false);
-  };
-
   return (
     <section id="work" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <div className="flex items-end justify-between mb-8">
-        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
-          Selected work
-        </h2>
-        <a
-          href="#contact"
-          className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
-        >
+        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Selected work</h2>
+        <a href="#contact" className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1">
           Request full reel <ArrowRight className="w-4 h-4" />
         </a>
       </div>
@@ -265,49 +122,29 @@ function Work() {
         {GALLERY.map((item, idx) => (
           <MDiv
             key={idx}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: idx * 0.04 }}
-            className="group relative overflow-hidden rounded-3xr border border-white/10"
+            initial={{opacity:0, y:10}}
+            whileInView={{opacity:1, y:0}}
+            viewport={{once:true}}
+            transition={{duration:0.4, delay: idx*0.04}}
+            className="group relative overflow-hidden rounded-3xl border border-white/10"
           >
             <img
               src={item.img}
               alt={item.title}
               className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-105"
             />
-
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div className="text-sm font-medium">{item.title}</div>
-
-              <Button
-                size="sm"
-                variant="secondary"
-                className="rounded-xl"
-                onClick={() => openVideo(item.video)}
-              >
-                View
-              </Button>
+              <Button size="sm" variant="secondary" className="rounded-xl">View</Button>
             </div>
           </MDiv>
         ))}
       </div>
-
-      {/* 🔥 MODAL */}
-      <VideoModal
-        isOpen={isModalOpen}
-        onClose={closeVideo}
-        videoUrl={activeVideo}
-      />
     </section>
   );
 }
 
-/* -------------------------------
-   PROCESS / PRICING / CONTACT / CTA / FOOTER
---------------------------------*/
 function Process() {
   const steps = [
     { title: "Brief & Mood", desc: "We define goals, audience, specs and references.", meta: "1–2 days" },
@@ -318,15 +155,13 @@ function Process() {
 
   return (
     <section id="process" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
-        How we work
-      </h2>
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">How we work</h2>
       <div className="grid md:grid-cols-4 gap-6">
         {steps.map((s, i) => (
           <Card key={i}>
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
-                <span>{i + 1}. {s.title}</span>
+                <span>{i+1}. {s.title}</span>
                 <Badge>{s.meta}</Badge>
               </CardTitle>
             </CardHeader>
@@ -342,16 +177,38 @@ function Process() {
 
 function Pricing() {
   const tiers = [
-    { name: "Basic", price: "$100", features: ["Up to 10s motion ad", "2K rendering", "2 rounds of revisions"] },
-    { name: "Standard", price: "$250", features: ["Up to 30s motion ad", "4K rendering", "3 rounds of revisions"] },
-    { name: "Premium", price: "$500", features: ["Up to 60s motion ad", "4K rendering", "Unlimited revisions"] },
+    {
+      name: "Basic",
+      price: "$100",
+      features: [
+        "Up to 10s motion ad",
+        "2K rendering",
+        "2 rounds of revisions",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$250",
+      features: [
+        "Up to 30s motion ad",
+        "4K rendering",
+        "3 rounds of revisions",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$500",
+      features: [
+        "Up to 60s motion ad",
+        "4K rendering",
+        "Unlimited revisions",
+      ],
+    },
   ];
 
   return (
     <section id="pricing" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
-        Transparent pricing
-      </h2>
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">Transparent pricing</h2>
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((t, i) => (
           <Card key={i} className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}>
@@ -367,9 +224,7 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a href="#contact">
-                <Button className="w-full mt-6 rounded-2xl">Choose {t.name}</Button>
-              </a>
+              <a href="#contact"><Button className="w-full mt-6 rounded-2xl">Choose {t.name}</Button></a>
             </CardContent>
           </Card>
         ))}
@@ -379,9 +234,9 @@ function Pricing() {
 }
 
 function Contact() {
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState<"idle" | "sent">("idle");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sent");
   };
@@ -432,9 +287,7 @@ function Contact() {
                 <Input placeholder="Company" />
                 <Input placeholder="Link to product / assets" />
                 <Textarea placeholder="Tell us about the scope, timeline, and platforms" />
-                <Button type="submit" className="w-full rounded-2xl">
-                  Request quote
-                </Button>
+                <Button type="submit" className="w-full rounded-2xl">Request quote</Button>
                 <p className="text-xs opacity-70 text-center">
                   By submitting, you agree to be contacted about your project.
                 </p>
@@ -453,9 +306,7 @@ function CTA() {
       <Card className="bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-white/20">
         <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <div className="text-2xl md:text-3xl font-semibold">
-              Ready to launch scroll-stopping ads?
-            </div>
+            <div className="text-2xl md:text-3xl font-semibold">Ready to launch scroll-stopping ads?</div>
             <p className="opacity-80 text-sm mt-2 max-w-prose">
               We can start from CAD, references or even napkin sketches.
             </p>
