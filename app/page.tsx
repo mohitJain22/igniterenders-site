@@ -32,12 +32,14 @@ const BRAND = {
 };
 
 const GALLERY = [
+ 
+  { title: "Gemini Dirtbike Render", img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763728527/Gemini_Generated_Image_z4ghvuz4ghvuz4gh_tx0zi9.png" },
   { title: "Sleek Headphones – Launch Visual", img: "https://images.unsplash.com/photo-1585386959984-a41552231658?q=80&w=1600&auto=format&fit=crop" },
   { title: "Smartwatch – Liquid Metal Look", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1600&auto=format&fit=crop" },
   { title: "Coffee Maker – Cinematic Ad", img: "https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1600&auto=format&fit=crop" },
   { title: "Skincare – Floating CG Packshot", img: "https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1600&auto=format&fit=crop" },
   { title: "Soda Can – Splash Simulation", img: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1600&auto=format&fit=crop" },
-  { title: "Sneakers – Motion Teaser", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1600&auto=format&fit=crop" },
+  
 ];
 
 function Nav() {
