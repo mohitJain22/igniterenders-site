@@ -47,7 +47,7 @@ function VideoModal({ isOpen, onClose, videoUrl }: VideoModalProps) {
   return (
     <AnimatePresence>
       {isOpen && videoUrl && (
-        <motion.div
+        <MDiv
           className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -56,7 +56,7 @@ function VideoModal({ isOpen, onClose, videoUrl }: VideoModalProps) {
           aria-modal="true"
           role="dialog"
         >
-          <motion.div
+          <MDiv
             className="relative w-[92vw] max-w-5xl bg-black rounded-xl overflow-hidden shadow-2xl"
             initial={{ scale: 0.97, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -80,8 +80,8 @@ function VideoModal({ isOpen, onClose, videoUrl }: VideoModalProps) {
                 className="w-full h-auto max-h-[80vh] bg-black"
               />
             </div>
-          </motion.div>
-        </motion.div>
+          </MDiv>
+        </MDiv>
       )}
     </AnimatePresence>
   );
@@ -223,7 +223,7 @@ function Hero() {
             <div className="flex items-center gap-2">
               <PlayCircle className="w-4 h-4" /> 4K delivery
             </div>
-            <div className="flex items-center gap-2">
+            <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
               <Sparkles className="w-4 h-4" /> PBR accurate
             </div>
           </div>
