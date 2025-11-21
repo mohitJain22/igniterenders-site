@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, forwardRef } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { motion, MotionProps, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,51 +16,70 @@ import {
   Instagram,
   Images,
   Shield,
-  X
+  X,
 } from "lucide-react";
 
-/** Typed wrapper wrapper for framer-motion */
+/** Typed wrapper so className & standard div props work cleanly with framer-motion on strict builds */
 type MDivProps = React.HTMLAttributes<HTMLDivElement> & MotionProps;
 const MDiv = forwardRef<HTMLDivElement, MDivProps>(function MDiv(props, ref) {
   return <motion.div ref={ref} {...props} />;
 });
 
 /* -------------------------------
-   🔥 VIDEO MODAL COMPONENT
+   VIDEO MODAL (typed)
 --------------------------------*/
-function VideoModal({ isOpen, onClose, videoUrl }) {
+interface VideoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  videoUrl: string | null;
+}
+
+function VideoModal({ isOpen, onClose, videoUrl }: VideoModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && videoUrl && (
         <motion.div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center"
+          className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
+          aria-modal="true"
+          role="dialog"
         >
           <motion.div
-            className="relative w-[90vw] max-w-4xl bg-black rounded-xl overflow-hidden"
-            initial={{ scale: 0.9, opacity: 0 }}
+            className="relative w-[92vw] max-w-5xl bg-black rounded-xl overflow-hidden shadow-2xl"
+            initial={{ scale: 0.97, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
+            exit={{ scale: 0.97, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
             <button
-              className="absolute top-3 right-3 bg-white/10 hover:bg-white/20 p-2 rounded-full"
+              aria-label="Close video"
+              className="absolute top-3 right-3 z-10 bg-white/10 hover:bg-white/20 p-2 rounded-full"
               onClick={onClose}
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-5 h-5 text-white" />
             </button>
 
-            {/* Video */}
-            <video
-              src={videoUrl}
-              autoPlay
-              controls
-              className="w-full h-auto"
-            />
+            <div className="w-full bg-black">
+              <video
+                src={videoUrl}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-auto max-h-[80vh] bg-black"
+              />
+            </div>
           </motion.div>
         </motion.div>
       )}
@@ -78,7 +97,7 @@ const BRAND = {
   instagram: "https://instagram.com/igniterenders",
 };
 
-const GALLERY = [
+const GALLERY: { title: string; img: string; video?: string | null }[] = [
   {
     title: "Gemini Dirtbike Render",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763728527/Gemini_Generated_Image_z4ghvuz4ghvuz4gh_tx0zi9.png",
@@ -233,10 +252,10 @@ function Hero() {
    WORK (with modal)
 --------------------------------*/
 function Work() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
-  const openVideo = (url) => {
+  const openVideo = (url?: string | null) => {
     if (!url) return;
     setActiveVideo(url);
     setIsModalOpen(true);
@@ -250,13 +269,8 @@ function Work() {
   return (
     <section id="work" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <div className="flex items-end justify-between mb-8">
-        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
-          Selected work
-        </h2>
-        <a
-          href="#contact"
-          className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
-        >
+        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Selected work</h2>
+        <a href="#contact" className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1">
           Request full reel <ArrowRight className="w-4 h-4" />
         </a>
       </div>
@@ -269,7 +283,7 @@ function Work() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: idx * 0.04 }}
-            className="group relative overflow-hidden rounded-3xr border border-white/10"
+            className="group relative overflow-hidden rounded-3xl border border-white/10"
           >
             <img
               src={item.img}
@@ -295,12 +309,8 @@ function Work() {
         ))}
       </div>
 
-      {/* 🔥 MODAL */}
-      <VideoModal
-        isOpen={isModalOpen}
-        onClose={closeVideo}
-        videoUrl={activeVideo}
-      />
+      {/* Modal inserted here */}
+      <VideoModal isOpen={isModalOpen} onClose={closeVideo} videoUrl={activeVideo} />
     </section>
   );
 }
@@ -318,9 +328,7 @@ function Process() {
 
   return (
     <section id="process" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
-        How we work
-      </h2>
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">How we work</h2>
       <div className="grid md:grid-cols-4 gap-6">
         {steps.map((s, i) => (
           <Card key={i}>
@@ -349,9 +357,7 @@ function Pricing() {
 
   return (
     <section id="pricing" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
-        Transparent pricing
-      </h2>
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">Transparent pricing</h2>
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((t, i) => (
           <Card key={i} className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}>
@@ -379,9 +385,9 @@ function Pricing() {
 }
 
 function Contact() {
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState<"idle" | "sent">("idle");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sent");
   };
@@ -390,9 +396,7 @@ function Contact() {
     <section id="contact" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
       <div className="grid md:grid-cols-2 gap-8 items-start">
         <div>
-          <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
-            Let's make something stunning
-          </h2>
+          <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Let's make something stunning</h2>
           <p className="mt-3 opacity-80 max-w-prose">
             Share a link to your product, target platform, deadlines and example styles you like. We'll reply with a ballpark and suggested approach.
           </p>
@@ -432,12 +436,8 @@ function Contact() {
                 <Input placeholder="Company" />
                 <Input placeholder="Link to product / assets" />
                 <Textarea placeholder="Tell us about the scope, timeline, and platforms" />
-                <Button type="submit" className="w-full rounded-2xl">
-                  Request quote
-                </Button>
-                <p className="text-xs opacity-70 text-center">
-                  By submitting, you agree to be contacted about your project.
-                </p>
+                <Button type="submit" className="w-full rounded-2xl">Request quote</Button>
+                <p className="text-xs opacity-70 text-center">By submitting, you agree to be contacted about your project.</p>
               </form>
             )}
           </CardContent>
@@ -453,17 +453,11 @@ function CTA() {
       <Card className="bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-white/20">
         <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <div className="text-2xl md:text-3xl font-semibold">
-              Ready to launch scroll-stopping ads?
-            </div>
-            <p className="opacity-80 text-sm mt-2 max-w-prose">
-              We can start from CAD, references or even napkin sketches.
-            </p>
+            <div className="text-2xl md:text-3xl font-semibold">Ready to launch scroll-stopping ads?</div>
+            <p className="opacity-80 text-sm mt-2 max-w-prose">We can start from CAD, references or even napkin sketches.</p>
           </div>
           <a href="#contact">
-            <Button size="lg" className="rounded-2xl">
-              <Rocket className="w-4 h-4 mr-2" /> Get started
-            </Button>
+            <Button size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2" /> Get started</Button>
           </a>
         </CardContent>
       </Card>
@@ -475,10 +469,7 @@ function Footer() {
   return (
     <footer className="border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 text-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="opacity-80">
-          © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
-        </div>
-
+        <div className="opacity-80">© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</div>
         <div className="flex items-center gap-4 opacity-80">
           <a href="#" className="hover:opacity-100">Privacy</a>
           <a href="#" className="hover:opacity-100">Terms</a>
