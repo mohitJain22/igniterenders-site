@@ -233,8 +233,8 @@ function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-            <img
-              src="https://res.cloudinary.com/dtb77wuci/video/upload/v1763816051/3D_Product_Animation_Showreel_2020___Wow-How_Studio_s4l3sx.mp4"
+            <video>
+              src="https://res.cloudinary.com/dtb77wuci/video/upload/v1763822239/igniterender2025_yvcmps.mp4"
               alt="Showreel 2025"
               className="w-full h-full object-cover"
             />
