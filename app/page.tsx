@@ -234,8 +234,8 @@ function Hero() {
         >
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1602526432604-c0e5d1471d55?q=80&w=1600&auto=format&fit=crop"
-              alt="Hero render"
+              src="https://res.cloudinary.com/dtb77wuci/video/upload/v1763816051/3D_Product_Animation_Showreel_2020___Wow-How_Studio_s4l3sx.mp4"
+              alt="Showreel 2025"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
