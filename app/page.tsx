@@ -102,7 +102,7 @@ const GALLERY: { title: string; img: string; video?: string | null }[] = [
     title: "Gemini Dirtbike Render",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763728527/Gemini_Generated_Image_z4ghvuz4ghvuz4gh_tx0zi9.png",
     video:
-      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763735637/Colosseum_s_Scent_A_Roman_s_Reflection_1_sorwxn.mp4",
+      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816472/7_drxcp6.mp4SS",
   },
   {
     title: "Sleek Headphones – Launch Visual",
