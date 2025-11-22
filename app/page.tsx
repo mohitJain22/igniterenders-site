@@ -136,18 +136,7 @@ const GALLERY: { title: string; img: string; video?: string | null }[] = [
     video:
       "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816468/1_l81lom.mp4",
   },
-  {
-    title: "Skincare – Floating CG Packshot",
-    img:
-      "https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
-  {
-    title: "Soda Can – Splash Simulation",
-    img:
-      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1600&auto=format&fit=crop",
-    video: null,
-  },
+
 ];
 
 /* -------------------------------
