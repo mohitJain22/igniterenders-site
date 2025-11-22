@@ -104,22 +104,21 @@ const GALLERY: { title: string; img: string; video?: string | null }[] = [
     video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816472/7_drxcp6.mp4"
   },
   {
-    title: "Sleek Headphones – Launch Visual",
-    img:
-      "https://images.unsplash.com/photo-1585386959984-a41552231658?q=80&w=1600&auto=format&fit=crop",
-    video: null,
+    title: "Xtreme Hot Sauce",
+    img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819931/vlcsnap-2025-11-22-19h04m51s814_o6y2kv.png",
+    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816479/input_wkxqit.mp4"
+      
   },
   {
-    title: "Smartwatch – Liquid Metal Look",
-    img:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1600&auto=format&fit=crop",
-    video: null,
+    title: "NeeMan's",
+    img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819932/vlcsnap-2025-11-22-19h05m18s220_qtcwme.png",
+    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816484/4_vn4nhe.mp4"
+
   },
   {
-    title: "Coffee Maker – Cinematic Ad",
-    img:
-      "https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1600&auto=format&fit=crop",
-    video: null,
+    title: "LANEIGE Sleeping Mask",
+    img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763821357/lav_nondlz.png",
+    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816468/1_l81lom.mp4",
   },
   {
     title: "Skincare – Floating CG Packshot",
