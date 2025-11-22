@@ -1,5 +1,10 @@
 "use client";
-import React, { useEffect, useState, forwardRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useRef,
+} from "react";
 import { motion, MotionProps, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +22,8 @@ import {
   Images,
   Shield,
   X,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 /** Typed wrapper so className & standard div props work cleanly with framer-motion on strict builds */
@@ -100,6 +107,9 @@ const BRAND = {
 const HERO_VIDEO_URL =
   "https://res.cloudinary.com/dtb77wuci/video/upload/v1763822239/igniterender2025_yvcmps.mp4";
 
+const HERO_POSTER =
+  "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819930/vlcsnap-2025-11-22-19h04m09s131_oezpq5.png";
+
 const GALLERY: { title: string; img: string; video?: string | null }[] = [
   {
     title: "Microsoft Surface Headphone",
@@ -178,16 +188,67 @@ function Nav() {
 }
 
 /* -------------------------------
-   HERO
+   HERO (Upgraded)
 --------------------------------*/
 function Hero() {
   const [isHeroModalOpen, setIsHeroModalOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [volume, setVolume] = useState(0); // 0–1
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  const handleToggleMute = () => {
+    const next = !isMuted;
+    setIsMuted(next);
+    const vid = heroVideoRef.current;
+    if (vid) {
+      vid.muted = next;
+      if (!next && vid.volume === 0) {
+        vid.volume = 0.5;
+        setVolume(0.5);
+      }
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value);
+    setVolume(v);
+    const vid = heroVideoRef.current;
+    if (vid) {
+      vid.volume = v;
+      if (v === 0) {
+        vid.muted = true;
+        setIsMuted(true);
+      } else {
+        vid.muted = false;
+        setIsMuted(false);
+      }
+    }
+  };
+
+  const handleScrubMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const vid = heroVideoRef.current;
+    if (!vid || !vid.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = Math.min(
+      Math.max((e.clientX - rect.left) / rect.width, 0),
+      1
+    );
+    vid.pause();
+    vid.currentTime = ratio * vid.duration;
+  };
+
+  const handleScrubLeave = () => {
+    const vid = heroVideoRef.current;
+    if (!vid) return;
+    vid.play().catch(() => undefined);
+  };
 
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/20 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
+        {/* Left: copy */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,52 +282,108 @@ function Hero() {
             </a>
           </div>
 
-          <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
+          {/* aligned tags in a single row */}
+          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm opacity-80">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4" /> NDA friendly
             </div>
             <div className="flex items-center gap-2">
               <PlayCircle className="w-4 h-4" /> 4K delivery
             </div>
-            <div className="mt-6 flex items-center gap-4 text-sm opacity-80">
+            <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4" /> PBR accurate
             </div>
           </div>
         </motion.div>
 
+        {/* Right: Hero video card */}
         <MDiv
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 16, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
+          className="relative"
         >
-          <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-            {/* Hero video confined to this card */}
+          <p className="mb-3 text-xs md:text-sm font-medium uppercase tracking-[0.18em] opacity-80">
+            Our Showreel 2025
+          </p>
+
+          <MDiv
+            whileHover={{ y: -4, scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            className="relative aspect-[16/10] rounded-3xl overflow-hidden bg-white/5 border border-white/15 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-xl"
+          >
             <video
+              ref={heroVideoRef}
               src={HERO_VIDEO_URL}
               className="w-full h-full object-cover"
               autoPlay
-              muted
+              muted={isMuted}
               loop
               playsInline
+              preload="none"
+              poster={HERO_POSTER}
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
 
-            {/* Play button overlay to open bigger modal */}
+            {/* soft gradient top overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
+
+            {/* central play button (opens modal) */}
             <button
               type="button"
               onClick={() => setIsHeroModalOpen(true)}
               className="absolute inset-0 flex items-center justify-center"
-              aria-label="Play showreel"
+              aria-label="Open showreel in larger view"
             >
-              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/80 hover:bg-white transition shadow-lg">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/85 hover:bg-white transition shadow-xl border border-white/60">
                 <PlayCircle className="w-8 h-8 text-black" />
               </div>
             </button>
-          </div>
+
+            {/* bottom interactive bar: hover scrub + volume */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 pb-3 px-3 flex justify-between items-end">
+              {/* scrub region */}
+              <div className="pointer-events-auto flex-1 mr-3">
+                <div
+                  className="relative h-6 md:h-7 cursor-ew-resize rounded-full bg-black/15 hover:bg-black/25 transition-colors overflow-hidden"
+                  onMouseMove={handleScrubMove}
+                  onMouseLeave={handleScrubLeave}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/0 to-white/10" />
+                  <div className="absolute inset-0 border border-white/10 rounded-full" />
+                </div>
+              </div>
+
+              {/* volume + mute */}
+              <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 border border-white/10">
+                <motion.button
+                  type="button"
+                  onClick={handleToggleMute}
+                  whileTap={{ scale: 0.8 }}
+                  className="p-1 rounded-full hover:bg-white/10"
+                  aria-label={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="w-4 h-4 text-white" />
+                  ) : (
+                    <Volume2 className="w-4 h-4 text-white" />
+                  )}
+                </motion.button>
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="h-1 w-20 md:w-24 accent-white cursor-pointer"
+                />
+              </div>
+            </div>
+          </MDiv>
         </MDiv>
       </div>
 
-      {/* Bigger windowed playback (uses existing modal) */}
+      {/* Bigger windowed playback (modal) */}
       <VideoModal
         isOpen={isHeroModalOpen}
         onClose={() => setIsHeroModalOpen(false)}
@@ -555,8 +672,7 @@ function Contact() {
                 <Input required placeholder="Name" />
                 <Input required type="email" placeholder="Email" />
                 <Input placeholder="Company" />
-                <Input placeholder="Link to product / assets" />
-                <Textarea placeholder="Tell us about the scope, timeline, and platforms" />
+                <Textarea placeholder="Tell us about your needs" />
                 <Button type="submit" className="w-full rounded-2xl">
                   Request quote
                 </Button>
