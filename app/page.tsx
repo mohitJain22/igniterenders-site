@@ -97,28 +97,33 @@ const BRAND = {
   instagram: "https://instagram.com/igniterenders",
 };
 
+const HERO_VIDEO_URL =
+  "https://res.cloudinary.com/dtb77wuci/video/upload/v1763822239/igniterender2025_yvcmps.mp4";
+
 const GALLERY: { title: string; img: string; video?: string | null }[] = [
   {
     title: "Microsoft Surface Headphone",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819930/vlcsnap-2025-11-22-19h04m09s131_oezpq5.png",
-    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816472/7_drxcp6.mp4"
+    video:
+      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816472/7_drxcp6.mp4",
   },
   {
     title: "Xtreme Hot Sauce",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819931/vlcsnap-2025-11-22-19h04m51s814_o6y2kv.png",
-    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816479/input_wkxqit.mp4"
-      
+    video:
+      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816479/input_wkxqit.mp4",
   },
   {
     title: "NeeMan's",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763819932/vlcsnap-2025-11-22-19h05m18s220_qtcwme.png",
-    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816484/4_vn4nhe.mp4"
-
+    video:
+      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816484/4_vn4nhe.mp4",
   },
   {
     title: "LANEIGE Sleeping Mask",
     img: "https://res.cloudinary.com/dtb77wuci/image/upload/v1763821357/lav_nondlz.png",
-    video: "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816468/1_l81lom.mp4",
+    video:
+      "https://res.cloudinary.com/dtb77wuci/video/upload/v1763816468/1_l81lom.mp4",
   },
   {
     title: "Skincare – Floating CG Packshot",
@@ -176,6 +181,8 @@ function Nav() {
    HERO
 --------------------------------*/
 function Hero() {
+  const [isHeroModalOpen, setIsHeroModalOpen] = useState(false);
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-indigo-600/20 via-transparent to-transparent pointer-events-none" />
@@ -233,15 +240,38 @@ function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <div className="relative aspect-[16/10] rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-            <video>
-              src="https://res.cloudinary.com/dtb77wuci/video/upload/v1763822239/igniterender2025_yvcmps.mp4"
-              alt="Showreel 2025"
+            {/* Hero video confined to this card */}
+            <video
+              src={HERO_VIDEO_URL}
               className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
+
+            {/* Play button overlay to open bigger modal */}
+            <button
+              type="button"
+              onClick={() => setIsHeroModalOpen(true)}
+              className="absolute inset-0 flex items-center justify-center"
+              aria-label="Play showreel"
+            >
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/80 hover:bg-white transition shadow-lg">
+                <PlayCircle className="w-8 h-8 text-black" />
+              </div>
+            </button>
           </div>
         </MDiv>
       </div>
+
+      {/* Bigger windowed playback (uses existing modal) */}
+      <VideoModal
+        isOpen={isHeroModalOpen}
+        onClose={() => setIsHeroModalOpen(false)}
+        videoUrl={HERO_VIDEO_URL}
+      />
     </section>
   );
 }
@@ -265,10 +295,18 @@ function Work() {
   };
 
   return (
-    <section id="work" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <section
+      id="work"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24"
+    >
       <div className="flex items-end justify-between mb-8">
-        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Selected work</h2>
-        <a href="#contact" className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1">
+        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
+          Selected work
+        </h2>
+        <a
+          href="#contact"
+          className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
+        >
           Request full reel <ArrowRight className="w-4 h-4" />
         </a>
       </div>
@@ -308,7 +346,11 @@ function Work() {
       </div>
 
       {/* Modal inserted here */}
-      <VideoModal isOpen={isModalOpen} onClose={closeVideo} videoUrl={activeVideo} />
+      <VideoModal
+        isOpen={isModalOpen}
+        onClose={closeVideo}
+        videoUrl={activeVideo}
+      />
     </section>
   );
 }
@@ -318,21 +360,44 @@ function Work() {
 --------------------------------*/
 function Process() {
   const steps = [
-    { title: "Brief & Mood", desc: "We define goals, audience, specs and references.", meta: "1–2 days" },
-    { title: "Model & Lookdev", desc: "Assets, shaders and lighting tuned for hero shots.", meta: "3–7 days" },
-    { title: "Animation & Sims", desc: "Blocking to final, with approvals on the way.", meta: "3–10 days" },
-    { title: "Grade & Delivery", desc: "Color-managed renders in all required formats.", meta: "1–2 days" },
+    {
+      title: "Brief & Mood",
+      desc: "We define goals, audience, specs and references.",
+      meta: "1–2 days",
+    },
+    {
+      title: "Model & Lookdev",
+      desc: "Assets, shaders and lighting tuned for hero shots.",
+      meta: "3–7 days",
+    },
+    {
+      title: "Animation & Sims",
+      desc: "Blocking to final, with approvals on the way.",
+      meta: "3–10 days",
+    },
+    {
+      title: "Grade & Delivery",
+      desc: "Color-managed renders in all required formats.",
+      meta: "1–2 days",
+    },
   ];
 
   return (
-    <section id="process" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">How we work</h2>
+    <section
+      id="process"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24"
+    >
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
+        How we work
+      </h2>
       <div className="grid md:grid-cols-4 gap-6">
         {steps.map((s, i) => (
           <Card key={i}>
             <CardHeader>
               <CardTitle className="text-base flex items-center justify-between">
-                <span>{i + 1}. {s.title}</span>
+                <span>
+                  {i + 1}. {s.title}
+                </span>
                 <Badge>{s.meta}</Badge>
               </CardTitle>
             </CardHeader>
@@ -348,17 +413,49 @@ function Process() {
 
 function Pricing() {
   const tiers = [
-    { name: "Basic", price: "$100", features: ["Up to 10s motion ad", "2K rendering", "2 rounds of revisions"] },
-    { name: "Standard", price: "$250", features: ["Up to 30s motion ad", "4K rendering", "3 rounds of revisions"] },
-    { name: "Premium", price: "$500", features: ["Up to 60s motion ad", "4K rendering", "Unlimited revisions"] },
+    {
+      name: "Basic",
+      price: "$100",
+      features: [
+        "Up to 10s motion ad",
+        "2K rendering",
+        "2 rounds of revisions",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$250",
+      features: [
+        "Up to 30s motion ad",
+        "4K rendering",
+        "3 rounds of revisions",
+      ],
+    },
+    {
+      name: "Premium",
+      price: "$500",
+      features: [
+        "Up to 60s motion ad",
+        "4K rendering",
+        "Unlimited revisions",
+      ],
+    },
   ];
 
   return (
-    <section id="pricing" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">Transparent pricing</h2>
+    <section
+      id="pricing"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24"
+    >
+      <h2 className="text-2xl md:text-4xl font-semibold tracking-tight mb-8">
+        Transparent pricing
+      </h2>
       <div className="grid md:grid-cols-3 gap-6">
         {tiers.map((t, i) => (
-          <Card key={i} className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}>
+          <Card
+            key={i}
+            className={`${i === 1 ? "ring-2 ring-indigo-400" : ""}`}
+          >
             <CardHeader>
               <CardTitle className="text-xl">{t.name}</CardTitle>
               <div className="text-3xl font-semibold">{t.price}</div>
@@ -372,7 +469,9 @@ function Pricing() {
                 ))}
               </ul>
               <a href="#contact">
-                <Button className="w-full mt-6 rounded-2xl">Choose {t.name}</Button>
+                <Button className="w-full mt-6 rounded-2xl">
+                  Choose {t.name}
+                </Button>
               </a>
             </CardContent>
           </Card>
@@ -391,25 +490,43 @@ function Contact() {
   };
 
   return (
-    <section id="contact" className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <section
+      id="contact"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24"
+    >
       <div className="grid md:grid-cols-2 gap-8 items-start">
         <div>
-          <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">Let's make something stunning</h2>
+          <h2 className="text-2xl md:text-4xl font-semibold tracking-tight">
+            Let's make something stunning
+          </h2>
           <p className="mt-3 opacity-80 max-w-prose">
-            Share a link to your product, target platform, deadlines and example styles you like. We'll reply with a ballpark and suggested approach.
+            Share a link to your product, target platform, deadlines and
+            example styles you like. We'll reply with a ballpark and suggested
+            approach.
           </p>
 
           <div className="mt-6 space-y-2 text-sm">
-            <a className="flex items-center gap-2 opacity-90 hover:opacity-100" href={`mailto:${BRAND.email}`}>
+            <a
+              className="flex items-center gap-2 opacity-90 hover:opacity-100"
+              href={`mailto:${BRAND.email}`}
+            >
               <Mail className="w-4 h-4" /> {BRAND.email}
             </a>
           </div>
 
           <div className="mt-6 flex items-center gap-4 opacity-80">
-            <a href={BRAND.instagram} aria-label="Instagram" className="hover:opacity-100 opacity-80">
+            <a
+              href={BRAND.instagram}
+              aria-label="Instagram"
+              className="hover:opacity-100 opacity-80"
+            >
               <Instagram className="w-5 h-5" />
             </a>
-            <a href={`mailto:${BRAND.email}`} aria-label="Email" className="hover:opacity-100 opacity-80">
+            <a
+              href={`mailto:${BRAND.email}`}
+              aria-label="Email"
+              className="hover:opacity-100 opacity-80"
+            >
               <Mail className="w-5 h-5" />
             </a>
           </div>
@@ -422,9 +539,15 @@ function Contact() {
           <CardContent>
             {status === "sent" ? (
               <div className="text-sm">
-                <p className="font-medium">Thanks! We'll get back within 24 hours.</p>
+                <p className="font-medium">
+                  Thanks! We'll get back within 24 hours.
+                </p>
                 <p className="opacity-80 mt-2">
-                  Meanwhile, email us references at <a className="underline" href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
+                  Meanwhile, email us references at{" "}
+                  <a className="underline" href={`mailto:${BRAND.email}`}>
+                    {BRAND.email}
+                  </a>
+                  .
                 </p>
               </div>
             ) : (
@@ -434,8 +557,12 @@ function Contact() {
                 <Input placeholder="Company" />
                 <Input placeholder="Link to product / assets" />
                 <Textarea placeholder="Tell us about the scope, timeline, and platforms" />
-                <Button type="submit" className="w-full rounded-2xl">Request quote</Button>
-                <p className="text-xs opacity-70 text-center">By submitting, you agree to be contacted about your project.</p>
+                <Button type="submit" className="w-full rounded-2xl">
+                  Request quote
+                </Button>
+                <p className="text-xs opacity-70 text-center">
+                  By submitting, you agree to be contacted about your project.
+                </p>
               </form>
             )}
           </CardContent>
@@ -451,11 +578,17 @@ function CTA() {
       <Card className="bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-white/20">
         <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <div className="text-2xl md:text-3xl font-semibold">Ready to launch scroll-stopping ads?</div>
-            <p className="opacity-80 text-sm mt-2 max-w-prose">We can start from CAD, references or even napkin sketches.</p>
+            <div className="text-2xl md:text-3xl font-semibold">
+              Ready to launch scroll-stopping ads?
+            </div>
+            <p className="opacity-80 text-sm mt-2 max-w-prose">
+              We can start from CAD, references or even napkin sketches.
+            </p>
           </div>
           <a href="#contact">
-            <Button size="lg" className="rounded-2xl"><Rocket className="w-4 h-4 mr-2" /> Get started</Button>
+            <Button size="lg" className="rounded-2xl">
+              <Rocket className="w-4 h-4 mr-2" /> Get started
+            </Button>
           </a>
         </CardContent>
       </Card>
@@ -467,11 +600,19 @@ function Footer() {
   return (
     <footer className="border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 text-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="opacity-80">© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</div>
+        <div className="opacity-80">
+          © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
+        </div>
         <div className="flex items-center gap-4 opacity-80">
-          <a href="#" className="hover:opacity-100">Privacy</a>
-          <a href="#" className="hover:opacity-100">Terms</a>
-          <a href={`mailto:${BRAND.email}`} className="hover:opacity-100">Contact</a>
+          <a href="#" className="hover:opacity-100">
+            Privacy
+          </a>
+          <a href="#" className="hover:opacity-100">
+            Terms
+          </a>
+          <a href={`mailto:${BRAND.email}`} className="hover:opacity-100">
+            Contact
+          </a>
         </div>
       </div>
     </footer>
